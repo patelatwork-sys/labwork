@@ -1,18 +1,15 @@
 targetScope = 'subscription'
-@description('Region for the resource group')
-param region string
 
-@allowed([
-  'dev'
-  'test'
-  'prod'
-]) 
-@description('Environment name')
-param environment string
+@description('The Azure region for the deployment')
+param location string
 
-var resourceGroupName = 'RGP-${region}-${environment}'
+@description('The environment name (dev, test, prod)')
+param environmentName string
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: resourceGroupName
-  location: region
+  name: 'rg-${environmentName}'
+  location: location
+  tags: {
+    Environment: environmentName
+  }
 }

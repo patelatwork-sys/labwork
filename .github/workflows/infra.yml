@@ -28,13 +28,14 @@ jobs:
         client-id: ${{ vars.CLIENT_ID }}
         tenant-id: ${{ vars.TENANT_ID }}
         subscription-id: ${{ vars.SUBSCRIPTION_ID }}
-        
-    - name: Deploy Bicep template
+
+    - name: Deploy Resource Group
       uses: azure/cli@v1
       with:
         inlineScript: |
           az deployment sub create \
             --name "rg-deployment-${{ github.run_number }}" \
-            --location ${{ vars.AZURE_REGION }} \
+            --location ${{ vars.AZURE_LOCATION }} \
             --template-file biceps/main.bicep \
-            --parameters region=${{ vars.AZURE_REGION }} environment=${{ vars.ENVIRONMENT }}
+            --parameters environmentName=${{ vars.ENVIRONMENT_NAME }} \
+                         location=${{ vars.AZURE_LOCATION }}
