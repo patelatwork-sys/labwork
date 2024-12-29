@@ -9,6 +9,9 @@ on:
       - '.github/workflows/infra.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'biceps/**'
+      - '.github/workflows/infra.yml'
 
 permissions:
   id-token: write
@@ -29,8 +32,20 @@ jobs:
         tenant-id: ${{ vars.TENANT_ID }}
         subscription-id: ${{ vars.SUBSCRIPTION_ID }}
 
+    - name: Az Bicep Plan
+      uses: azure/cli@v1
+      with:
+        inlineScript: |
+          az deployment sub what-if \
+            --name "rg-deployment-${{ github.run_number }}" \
+            --location ${{ vars.AZURE_REGION }} \
+            --template-file biceps/main.bicep \
+            --parameters environmentName=${{ vars.ENVIRONMENT }} \
+                         location=${{ vars.AZURE_REGION }}    
+    
     - name: Az Bicep Deployment
       uses: azure/cli@v1
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       with:
         inlineScript: |
           az deployment sub create \
