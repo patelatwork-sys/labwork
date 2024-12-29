@@ -5,22 +5,36 @@ param location string
 @description('The environment name')
 param environmentName string
 
-module coreRG 'resources/rg.bicep' = {
-  name: 'resourceGroupDeployment'
+var locationAcronym = {
+  eastus: 'eus'
+  westus: 'wus'
+  northeurope: 'neu'
+  westeurope: 'weu'
+}[toLower(location)]
+
+resource rg 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+  name: 'rg-${locationAcronym}-${environmentName}'
+  location: location
+  tags: {
+    Environment: environmentName
+    Location: location
+  }
+}
+
+module storage 'resources/storage.bicep' = {
+  name: 'storageAccountDeployment'
+  scope: rg
   params: {
     location: location
     environmentName: environmentName
   }
 }
 
-module storage 'resources/storage.bicep' = {
-  name: 'storageAccountDeployment'
-  scope: coreRG
+module storageContainer 'resources/storage_container.bicep' = {
+  name: 'storageContainerDeployment'
+  scope: rg
   params: {
-    location: location
-    environmentName: environmentName
+    storageAccountName: storage.outputs.storageAccountName
+    containerName: 'tfplan'
   }
-  dependsOn: [
-    coreRG
-  ]
 }

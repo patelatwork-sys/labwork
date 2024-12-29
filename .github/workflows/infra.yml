@@ -29,7 +29,7 @@ jobs:
         tenant-id: ${{ vars.TENANT_ID }}
         subscription-id: ${{ vars.SUBSCRIPTION_ID }}
 
-    - name: Deploy Resource Group
+    - name: Az Bicep Deployment
       uses: azure/cli@v1
       with:
         inlineScript: |
