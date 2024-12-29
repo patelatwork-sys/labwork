@@ -35,7 +35,7 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name "rg-deployment-${{ github.run_number }}" \
-            --location ${{ vars.AZURE_LOCATION }} \
+            --location ${{ vars.AZURE_REGION }} \
             --template-file biceps/main.bicep \
-            --parameters environmentName=${{ vars.ENVIRONMENT_NAME }} \
-                         location=${{ vars.AZURE_LOCATION }}
+            --parameters environmentName=${{ vars.ENVIRONMENT }} \
+                         location=${{ vars.AZURE_REGION }}
