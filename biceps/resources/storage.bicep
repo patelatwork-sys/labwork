@@ -11,7 +11,7 @@ var locationAcronym = {
 var uniqueSuffix = take(uniqueString(subscription().subscriptionId, resourceGroup().id), 5)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
-  name: 'sto-${locationAcronym}${environmentName}${uniqueSuffix}'
+  name: 'sto${locationAcronym}${environmentName}${uniqueSuffix}'
   location: location
   sku: {
     name: 'Standard_LRS'
