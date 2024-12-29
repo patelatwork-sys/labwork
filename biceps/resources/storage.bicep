@@ -1,9 +1,17 @@
 param location string
 param environmentName string
-param storageAccountName string = 'st${uniqueString(resourceGroup().id)}'
+
+var locationAcronym = {
+  eastus: 'eus'
+  westus: 'wus'
+  northeurope: 'neu'
+  westeurope: 'weu'
+}[toLower(location)]
+
+var uniqueSuffix = take(uniqueString(subscription().subscriptionId, resourceGroup().id), 5)
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
-  name: storageAccountName
+  name: 'sto${locationAcronym}${environmentName}${uniqueSuffix}'
   location: location
   sku: {
     name: 'Standard_LRS'
