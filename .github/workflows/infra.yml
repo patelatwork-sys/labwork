@@ -20,9 +20,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        client-id: ${{ secrets.CLIENT_ID }}
-        tenant-id: ${{ secrets.TENANT_ID }}
-        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        client-id: ${{ vars.CLIENT_ID }}
+        tenant-id: ${{ vars.TENANT_ID }}
+        subscription-id: ${{ vars.SUBSCRIPTION_ID }}
         
     - name: Deploy Bicep template
       uses: azure/cli@v1

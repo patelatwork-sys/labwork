@@ -25,7 +25,7 @@ jobs:
     - name: Create .env file
       run: |
         echo "GEMINI_API_KEY=${{ secrets.GOOGLE_API_KEY }}" > gemini/.env
-        echo "AZURE_APIM_ENDPOINT=${{ secrets.AZURE_API_URL }}" >> gemini/.env
+        echo "AZURE_APIM_ENDPOINT=${{ vars.AZURE_API_URL }}" >> gemini/.env
         echo "AZURE_APIM_SUBSCRIPTION_KEY=${{ secrets.AZURE_API_KEY }}" >> gemini/.env
         
     - name: Install dependencies
