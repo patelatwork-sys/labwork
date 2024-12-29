@@ -1,0 +1,35 @@
+name: Deploy Azure Resources
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'biceps/**'
+      - '.github/workflows/infra.yml'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.CLIENT_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+        
+    - name: Deploy Bicep template
+      uses: azure/cli@v1
+      with:
+        inlineScript: |
+          az deployment sub create \
+            --name "rg-deployment-${{ github.run_number }}" \
+            --location ${{ vars.AZURE_REGION }} \
+            --template-file biceps/main.bicep \
+            --parameters region=${{ vars.AZURE_REGION }} environment=${{ vars.ENVIRONMENT }}
