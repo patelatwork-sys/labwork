@@ -10,9 +10,14 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: Dev
     
     steps:
     - uses: actions/checkout@v3
